@@ -2,6 +2,9 @@ $(document).ready(function () {
 
     let isRunning = false;
     let intervals = [];
+    let clear = [];
+    let infected = [];
+    let recovered = [];
 
     $('button').click(function () {
 
@@ -84,7 +87,6 @@ let createSubjects = function (isRunning, intervals) {
                 numClear--;
 
                 let symptomPeriod = Math.floor(Math.random() * 10000) + 10000;
-                symptomPeriod = 1000;
 
                 setTimeout(function () {
                     $(`#clear-${i}`).css('background-color', 'green');
@@ -112,7 +114,6 @@ let createSubjects = function (isRunning, intervals) {
         let xRightMovement = Math.round(Math.random());
         let yDownMovement = Math.round(Math.random());
         let symptomPeriod = Math.floor(Math.random() * 10000) + 10000;
-        symptomPeriod = 1000;
 
         $('#model-container').append(`<div id="infected-${i}" class="infected"></div>`);
 
