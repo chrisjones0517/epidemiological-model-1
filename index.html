@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>test page</h1>
+    <label for="numClear">Number of Non-infected</label>
+    <br>
+    <input id="numClear" type="number" min="1" max="100">
+    <br>
+    <br>
+    <label for="numInfected">Number of Infected</label>
+    <br>
+    <input id="numInfected" type="number" min="1" max="100">
+    <button>Click to start animation</button>
+    <h2>Current Percent Infected:&nbsp;&nbsp;<span id="percent-infected">0</span><span>%</span></h2>
+    <h2>Current Percent Recovered:&nbsp;&nbsp;<span id="percent-recovered">0</span><span>%</span></h2>
+    <div id="model-container">
+    </div>
+</body>
+<script src="index.js">
+</script>
+
+</html>

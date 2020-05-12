@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#model-container {
+    height: 400px;
+    width: 1000px;
+    border: 2px solid #000000;
+    background-color: beige;
+    margin: auto;
+}
+
+button {
+    display: table;
+    margin: auto;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.clear {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: lightblue;
+    position: absolute;
+}
+
+.recovered {
+
+}
+
+.infected {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: absolute;
+    background-color: palevioletred;
+}
+
