@@ -16,18 +16,36 @@
 </head>
 
 <body>
-    <h1>test page</h1>
+    <h1>Epidemiological Model</h1>
     <label for="numClear">Number of Non-infected</label>
     <br>
-    <input id="numClear" type="number" min="1" max="100">
+    <input id="numClear" type="number" min="1" max="100" value="10">
     <br>
     <br>
     <label for="numInfected">Number of Infected</label>
     <br>
-    <input id="numInfected" type="number" min="1" max="100">
-    <button>Click to start animation</button>
-    <h2>Current Percent Infected:&nbsp;&nbsp;<span id="percent-infected">0</span><span>%</span></h2>
-    <h2>Current Percent Recovered:&nbsp;&nbsp;<span id="percent-recovered">0</span><span>%</span></h2>
+    <input id="numInfected" type="number" min="1" max="100" value="1">
+    <br>
+    <br>
+    <label for="r-naught">Spread rate</label>
+    <br>
+    <input id="r-naught" type="number" step="0.1" min="1.1" max="10" value="3">
+    <br>
+    <br>
+    <label for="infectiousPeriod">Infectious Period in Days</label>
+    <br>
+    <input id="infectiousPeriod" type="number" min="1" max="100" value="7">
+    <br>
+    <br>
+    <label for="variation">Variation in Infectious Period in Days (from average infectious period)</label>
+    <br>
+    <input id="variation" type="number" min="0" max="100" value="3">
+    <button id="animate">Click to start animation</button>
+    <button id="reset">Reset</button>
+    <h4>Current Percent Infected:&nbsp;&nbsp;<span id="percent-infected">0</span><span>%</span></h4>
+    <h4>Current Percent Recovered:&nbsp;&nbsp;<span id="percent-recovered">0</span><span>%</span></h4>
+    <h4>Current Percent Never Infected:&nbsp;&nbsp;<span id="percent-never">0</span><span>%</span></h4>
+    <h4>Time elapsed in days (5 seconds = 1 day): <span id="t-days">0</span> <span> days</span></h4>
     <div id="model-container">
     </div>
 </body>
