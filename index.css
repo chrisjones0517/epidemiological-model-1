@@ -1,3 +1,8 @@
+body {
+    background-image: url('./webb.png');
+
+}
+
 #model-container {
     height: 400px;
     width: 1000px;
@@ -6,11 +11,20 @@
     margin: auto;
 }
 
-button {
-    display: table;
+#keys {
+    width: 1000px;
+    border: 2px solid #000000;
     margin: auto;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
+    border-top-width: 0;
+    padding: 1rem;
+    background-color: #fff;
+}
+
+.key {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    float: left;
 }
 
 .clear, .recovered, .infected {
@@ -20,15 +34,18 @@ button {
     position: absolute;
 }
 
-.clear {
+.clear, #key1 {
     background-color: lightblue;
 }
 
-.recovered {
+.recovered, #key3 {
     background-color: green;
 }
 
-.infected {
+.infected, #key2 {
     background-color: palevioletred;
 }
 
+table, canvas, p {
+    background-color: #fff;
+}

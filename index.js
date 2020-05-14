@@ -1,11 +1,6 @@
 $(document).ready(function () {
 
     let isRunning = false;
-
-    // let intervals = [];
-    // let clear = [];
-    // let infected = [];
-    // let recovered = [];
     let subjects = [];
     let animate;
     let clear = 0;
@@ -14,17 +9,23 @@ $(document).ready(function () {
     let newModel = true;
     let timer;
     let tDays = 0;
+    let days = [];
+    let dailyCount = 0;
 
-    $('#reset').click(function() {
+    $('#reset').click(function () {
         location.reload();
     });
 
     $('#animate').click(function () {
-        
-        let rNaught = parseInt($('#r-naught').val());
+        let rNaught = parseFloat($('#r-naught').val());
         let speed = Math.round((rNaught + 100) / rNaught);
         let infectiousPeriod = 5000 * parseInt($('#infectiousPeriod').val());
         let variation = 5000 * parseInt($('#variation').val());
+        let message = '';
+        let inputClear = $('#numClear').val();
+        let inputInfected = $('#numInfected').val();
+        let inputPeriod = parseInt($('#infectiousPeriod').val());
+        let inputVariation = parseInt($('#variation').val());
 
         clear = parseInt($('#numClear').val());
         infected = parseInt($('#numInfected').val());
@@ -35,137 +36,195 @@ $(document).ready(function () {
         $('#variation').attr('disabled', 'true');
         $('#animate').removeClass('btn-success').addClass('btn-danger');
 
-        if (!isRunning) {
-            isRunning = true;
-            // createSubjects(isRunning, intervals);
-            $('#animate').text('Click to stop animation');
+        if (rNaught < 1 || rNaught > 10) {
+            message = 'Please choose a Spread Rate between 1 and 10.';
+        } else if (inputClear < 1 || inputClear > 100) {
+            message = 'Please choose a Number of Non-infected between 1 and 100.';
+        } else if (inputInfected < 1 || inputInfected > 100) {
+            message = 'Please choose a Number of Infected between 1 and 100.';
+        } else if (inputPeriod < 1 || inputPeriod > 100) {
+            message = 'Please choose an Infectious Period between 1 and 100.';
+        } else if (inputVariation < 0 || inputVariation > 100) {
+            message = 'Please choose a Variation in Infectious Period between 0 and 100.';
+        }
 
-            if (newModel) {
+        if (!message) {
 
-                for (let i = 0; i < clear; i++) {
-                    let xCoord = Math.floor(Math.random() * 980);
-                    let yCoord = Math.floor(Math.random() * 380);
-                    let xRightMovement = Math.round(Math.random());
-                    let yDownMovement = Math.round(Math.random());
-                    $('#model-container').append(`<div id=${i} class="clear"></div>`);
+            if (!isRunning) {
+                isRunning = true;
+                $('#animate').text('Click to stop animation');
 
-                    let clrSub = {
-                        id: i,
-                        xCoord,
-                        yCoord,
-                        xRightMovement,
-                        yDownMovement,
-                        timeSinceInf: 1,
-                        status: 'clear'
-                    };
+                if (newModel) {
 
-                    subjects.push(clrSub);
+                    for (let i = 0; i < clear; i++) {
+                        let xCoord = Math.floor(Math.random() * 980);
+                        let yCoord = Math.floor(Math.random() * 380);
+                        let xRightMovement = Math.round(Math.random());
+                        let yDownMovement = Math.round(Math.random());
+                        $('#model-container').append(`<div id=${i} class="clear"></div>`);
 
+                        let clrSub = {
+                            id: i,
+                            xCoord,
+                            yCoord,
+                            xRightMovement,
+                            yDownMovement,
+                            timeSinceInf: 1,
+                            status: 'clear'
+                        };
 
-                    // $(`#${i}`).css({
-                    //     "margin-left": xCoord,
-                    //     "margin-top": yCoord
-                    // });
-                }
+                        subjects.push(clrSub);
 
-                for (let i = 0; i < infected; i++) {
-                    let xCoord = Math.floor(Math.random() * 980);
-                    let yCoord = Math.floor(Math.random() * 380);
-                    let xRightMovement = Math.round(Math.random());
-                    let yDownMovement = Math.round(Math.random());
-                    $('#model-container').append(`<div id=${i + 100} class="infected"></div>`);
-
-                    let infSub = {
-                        id: i + 100,
-                        xCoord,
-                        yCoord,
-                        xRightMovement,
-                        yDownMovement,
-                        timeSinceInf: Math.round(Math.random() * infectiousPeriod),
-                        status: 'infected'
-                    };
-
-                    subjects.push(infSub);
-
-                }
-            }
-
-            timer = setInterval(() => {
-                tDays++;
-            }, 5000);
-
-            animate = setInterval(() => {
-
-                $('#t-days').text(tDays);
-
-                let percentInfected = Math.round(infected / subjects.length * 100);
-                let percentRecovered = Math.round(recovered / subjects.length * 100);
-                let percentNever = Math.round(clear / subjects.length * 100);
-
-                $('#percent-infected').text(percentInfected);
-                $('#percent-recovered').text(percentRecovered);
-                $('#percent-never').text(percentNever);
-
-                subjects.forEach(function (value, index) {
-
-                    movement(value);
-
-                    if (value.timeSinceInf > 0 && value.status === 'infected') {
-                        value.timeSinceInf -= speed;
-                        // console.log('timeSinceInf', value.timeSinceInf);
-                        // console.log(value.status);
-                        // console.log('time since infection was decremented');
                     }
 
-                    if (value.timeSinceInf <= 0 && value.status === 'infected') {
+                    for (let i = 0; i < infected; i++) {
+                        let xCoord = Math.floor(Math.random() * 980);
+                        let yCoord = Math.floor(Math.random() * 380);
+                        let xRightMovement = Math.round(Math.random());
+                        let yDownMovement = Math.round(Math.random());
+                        $('#model-container').append(`<div id=${i + 100} class="infected"></div>`);
 
-                        value.status = 'recovered';
+                        let infSub = {
+                            id: i + 100,
+                            xCoord,
+                            yCoord,
+                            xRightMovement,
+                            yDownMovement,
+                            timeSinceInf: Math.round(Math.random() * infectiousPeriod),
+                            status: 'infected'
+                        };
 
-                        $(`#${value.id}`).removeClass('infected').addClass('recovered');
-                        recovered++;
-                        infected--;
+                        subjects.push(infSub);
+
                     }
+                }
 
-                    subjects.forEach(function (current, ind) {
+                timer = setInterval(() => {
+                    tDays++;
+                    let dailyTotal = {
+                        day: tDays,
+                        dailyCount
+                    };
 
-                        if (index !== ind && value.status === 'clear') {
-                            let xDiff = Math.abs(current.xCoord - value.xCoord);
-                            let yDiff = Math.abs(current.yCoord - value.yCoord);
+                    days.push(dailyTotal);
+                    $('#dailyCount').text(dailyCount);
+                    dailyCount = 0;
+                }, 5000);
 
-                            if (yDiff < 20 && xDiff < 20 && current.status === 'infected') {
+                animate = setInterval(() => {
 
-                                $(`#${value.id}`).removeClass('clear').addClass('infected');
-                                clear--;
-                                infected++;
-                                value.status = 'infected';
-                                value.timeSinceInf = Math.round(Math.random() * ((infectiousPeriod + variation) - (infectiousPeriod - variation)) + (infectiousPeriod - variation));
-                            }
+                    $('#t-days').text(tDays);
+
+                    let percentInfected = Math.round(infected / subjects.length * 100);
+                    let percentRecovered = Math.round(recovered / subjects.length * 100);
+                    let percentNever = Math.round(clear / subjects.length * 100);
+
+                    $('#percent-infected').text(percentInfected);
+                    $('#percent-recovered').text(percentRecovered);
+                    $('#percent-never').text(percentNever);
+                    $('#numberInfected').text(infected);
+                    $('#numberRecovered').text(recovered);
+                    $('#numberNever').text(clear);
+
+                    subjects.forEach(function (value, index) {
+
+                        movement(value);
+
+                        if (value.timeSinceInf > 0 && value.status === 'infected') {
+                            value.timeSinceInf -= speed;
                         }
-                        // clear.splice(index, 1);
 
-                        // movement(current);
+                        if (value.timeSinceInf <= 0 && value.status === 'infected') {
+
+                            value.status = 'recovered';
+
+                            $(`#${value.id}`).removeClass('infected').addClass('recovered');
+                            recovered++;
+                            infected--;
+                        }
+
+                        subjects.forEach(function (current, ind) {
+
+                            if (index !== ind && value.status === 'clear') {
+                                let xDiff = Math.abs(current.xCoord - value.xCoord);
+                                let yDiff = Math.abs(current.yCoord - value.yCoord);
+
+                                if (yDiff < 20 && xDiff < 20 && current.status === 'infected') {
+
+                                    $(`#${value.id}`).removeClass('clear').addClass('infected');
+                                    clear--;
+                                    infected++;
+                                    dailyCount++;
+                                    value.status = 'infected';
+                                    value.timeSinceInf = Math.round(Math.random() * ((infectiousPeriod + variation) - (infectiousPeriod - variation)) + (infectiousPeriod - variation));
+                                }
+                            }
+                        });
                     });
+                }, speed);
+            } else {
+                clearInterval(animate);
+                clearInterval(timer);
+                isRunning = false;
+                newModel = false;
 
-
-
-
-                });
-
-            }, speed);
-
+                $('#animate').text('Click to start animation').removeClass('btn-danger').addClass('btn-success');
+                createChart(days)
+            }
         } else {
-            clearInterval(animate);
-            clearInterval(timer);
-            isRunning = false;
-            newModel = false;
-            // intervals.forEach(clearInterval);
-            // $('#model-container').empty();
-            
-            $('#animate').text('Click to start animation').removeClass('btn-danger').addClass('btn-success');
-            // $('#t-days').text(0);
+            $('#message').text(message);
+            $('#myModal').modal('show');
+            $('#close').click(() => {
+                location.reload();
+            });
         }
     });
 });
+
+function createChart(arrayOfObj) {
+    let myLabels = [];
+    let myData = [];
+    arrayOfObj.forEach((value, index) => {
+        myLabels.push(value.day);
+        myData.push(value.dailyCount);
+    });
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+
+        data: {
+            labels: myLabels,
+            datasets: [{
+                label: 'Number of New Daily Infections',
+                backgroundColor: 'rgb(219, 112, 147)',
+                borderColor: 'rgb(219, 112, 147)',
+                data: myData
+            }]
+        },
+
+        // Configuration options go here
+
+        options: {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of New Infections'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Days'
+                    }
+                }]
+            }
+        }
+    });
+}
 
 function movement(value) {
     if (value.xRightMovement) {
@@ -202,158 +261,5 @@ function movement(value) {
     });
 }
 
-// let createSubjects = function (isRunning, intervals) {
 
-// let numClear = $('#numClear').val();
-// let numInfected = $('#numInfected').val();
-//     let numRecovered = 0;
-//     let globalX;
-//     let globalY;
-//     let globalColor;
-//     let tdays = 0;
-
-//     for (let i = 0; i < numClear; i++) {
-// let xCoord = Math.floor(Math.random() * 980);
-// let yCoord = Math.floor(Math.random() * 380);
-// let xRightMovement = Math.round(Math.random());
-// let yDownMovement = Math.round(Math.random());
-
-//         $('#model-container').append(`<div id="clear-${i}" class="clear"></div>`);
-
-// let animate = setInterval(function () {
-
-// if (xRightMovement) {
-//     xCoord++;
-// } else {
-//     xCoord--;
-// }
-
-// if (yDownMovement) {
-//     yCoord++;
-// } else {
-//     yCoord--;
-// }
-
-// if (xCoord >= 980) {
-//     xRightMovement = false;
-// }
-
-// if (xCoord <= 0) {
-//     xRightMovement = true;
-// }
-
-// if (yCoord <= 0) {
-//     yDownMovement = true;
-// }
-
-// if (yCoord >= 380) {
-//     yDownMovement = false;
-// }
-
-// let xDiff = Math.abs(globalX - xCoord);
-// let yDiff = Math.abs(globalY - yCoord);
-//     let color = $(`#clear-${i}`).css('background-color');
-
-// $(`#clear-${i}`).css({
-//     "margin-left": xCoord,
-//     "margin-top": yCoord
-// });
-
-//             // Contact determination logic
-
-            // if (yDiff < 20 && xDiff < 20 && color === 'rgb(173, 216, 230)' && globalColor !== 'rgb(0, 255, 0)') {
-            //     console.log('infection spreading');
-            //     console.log('color', color);
-            //     $(`#clear-${i}`).css('background-color', 'palevioletred');
-            //     numInfected++;
-            //     numClear--;
-
-            //     let symptomPeriod = Math.floor(Math.random() * 10000) + 10000;
-
-            //     setTimeout(function () {
-            //         $(`#clear-${i}`).css('background-color', 'green');
-            //         numRecovered++;
-            //         numInfected--;
-
-            //     }, symptomPeriod);
-            // }
-
-//             // ******************************************************* 
-
-//         }, 5);
-
-//         intervals.push(animate);
-//     }
-
-//     let percentUpdate = setInterval(function () {
-//         $('#percent-infected').text(Math.round((numInfected / (numClear + numRecovered + numInfected)) * 100));
-//         $('#percent-recovered').text(Math.round((numRecovered / (numRecovered + numClear + numInfected)) * 100));
-//     }, 100);
-
-//     intervals.push(percentUpdate);
-
-//     for (let i = 0; i < numInfected; i++) {
-//         let xCoord = Math.floor(Math.random() * 980);
-//         let yCoord = Math.floor(Math.random() * 380);
-//         let xRightMovement = Math.round(Math.random());
-//         let yDownMovement = Math.round(Math.random());
-//         let symptomPeriod = Math.floor(Math.random() * 10000) + 10000;
-
-//         $('#model-container').append(`<div id="infected-${i}" class="infected"></div>`);
-
-//         setTimeout(function () {
-//             $(`#infected-${i}`).css('background-color', 'green');
-//             numRecovered++;
-//             numInfected--;
-//         }, symptomPeriod);
-
-//         let animate = setInterval(function () {
-
-//             if (xRightMovement) {
-//                 xCoord++;
-//             } else {
-//                 xCoord--;
-//             }
-
-//             if (yDownMovement) {
-//                 yCoord++;
-//             } else {
-//                 yCoord--;
-//             }
-
-//             if (xCoord >= 980) {
-//                 xRightMovement = false;
-//             }
-
-//             if (xCoord <= 0) {
-//                 xRightMovement = true;
-//             }
-
-//             if (yCoord <= 0) {
-//                 yDownMovement = true;
-//             }
-
-//             if (yCoord >= 380) {
-//                 yDownMovement = false;
-//             }
-
-//             $(`#infected-${i}`).css({
-//                 "margin-left": xCoord,
-//                 "margin-top": yCoord
-//             });
-
-//             globalX = xCoord;
-//             globalY = yCoord;
-//             globalColor = $(`#infected-${i}`).css('background-color');
-
-//         }, 5);
-
-//         intervals.push(animate);
-
-//     }
-
-//     // ************************************ Refactored method ********************************************************
-
-
-// }
 
