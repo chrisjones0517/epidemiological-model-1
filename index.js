@@ -20,6 +20,7 @@ $(document).ready(function () {
     });
 
     $('#animate').click(function () {
+        
         let rNaught = parseInt($('#r-naught').val());
         let speed = Math.round((rNaught + 100) / rNaught);
         let infectiousPeriod = 5000 * parseInt($('#infectiousPeriod').val());
@@ -27,6 +28,12 @@ $(document).ready(function () {
 
         clear = parseInt($('#numClear').val());
         infected = parseInt($('#numInfected').val());
+        $('#numClear').attr('disabled', 'true');
+        $('#numInfected').attr('disabled', 'true');
+        $('#r-naught').attr('disabled', 'true');
+        $('#infectiousPeriod').attr('disabled', 'true');
+        $('#variation').attr('disabled', 'true');
+        $('#animate').removeClass('btn-success').addClass('btn-danger');
 
         if (!isRunning) {
             isRunning = true;
@@ -153,7 +160,8 @@ $(document).ready(function () {
             newModel = false;
             // intervals.forEach(clearInterval);
             // $('#model-container').empty();
-            $('#animate').text('Click to start animation');
+            
+            $('#animate').text('Click to start animation').removeClass('btn-danger').addClass('btn-success');
             // $('#t-days').text(0);
         }
     });
